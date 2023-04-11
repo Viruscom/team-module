@@ -3,32 +3,36 @@
 namespace Modules\Team\Models;
 
 use App\Actions\CommonControllerAction;
+use App\Helpers\AdminHelper;
 use App\Helpers\CacheKeysHelper;
+use App\Helpers\FileDimensionHelper;
 use App\Interfaces\Models\CommonModelInterface;
+use App\Interfaces\Models\ImageModelInterface;
 use App\Interfaces\PositionInterface;
+use App\Models\CategoryPage\CategoryPageTranslation;
 use App\Traits\CommonActions;
+use App\Traits\HasGallery;
 use App\Traits\Scopes;
 use App\Traits\StorageActions;
 use Astrotomic\Translatable\Contracts\Translatable as TranslatableContract;
 use Astrotomic\Translatable\Translatable;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Support\Str;
 
-class Team extends Model implements TranslatableContract, CommonModelInterface, PositionInterface
+class Team extends Model implements TranslatableContract, CommonModelInterface, ImageModelInterface
 {
-    use Translatable, StorageActions, Scopes, CommonActions;
+    use Translatable, Scopes, StorageActions, CommonActions, HasGallery;
 
     public const FILES_PATH = "images/team";
 
-    public static string $TEAM_SYSTEM_IMAGE  = "team_1_image.png";
-    public static string $TEAM_RATIO         = '3/2';
+    public static string $TEAM_SYSTEM_IMAGE  = "team_image.png";
+    public static string $TEAM_RATIO         = '1/1';
     public static string $TEAM_MIMES         = 'jpg,jpeg,png,gif';
     public static string $TEAM_MAX_FILE_SIZE = '3000';
 
-    public array         $translatedAttributes        = ['title', 'url', 'announce', 'description', 'visible', 'title_additional_1', 'title_additional_2', 'title_additional_3',
-                                                         'title_additional_4', 'title_additional_5', 'title_additional_6', 'text_additional_1', 'text_additional_2',
-                                                         'text_additional_3', 'text_additional_4', 'text_additional_5', 'text_additional_6'];
-    protected            $table                       = "pages";
-    protected            $fillable                    = ['category_page_id', 'from_price', 'price', 'from_date', 'to_date', 'show_in_homepage', 'active', 'position', 'creator_user_id', 'show_in_homepage_type', 'one_day_event', 'one_day_event_date', 'filename', 'filename_box2', 'filename_box3', 'in_ad_box', 'product_id'];
+    public array $translatedAttributes = ['title', 'url', 'announce', 'description', 'visible'];
+    protected    $table                = "team";
+    protected    $fillable             = ['email', 'phone', 'filename', 'position', 'active'];
 
     public static function cacheUpdate(): void
     {
@@ -40,26 +44,107 @@ class Team extends Model implements TranslatableContract, CommonModelInterface, 
         cache()->rememberForever(CacheKeysHelper::$TEAM_FRONT, function () {
             return self::active(true)->with('translations')->withTranslation()->orderBy('position')->get();
         });
-
     }
     public static function getRequestData($request)
     {
-        // TODO: Implement getRequestData() method.
-    }
-    public static function generatePosition($request)
-    {
-        // TODO: Implement generatePosition() method.
+        if ($request->has('email')) {
+            $data['email'] = $request->email;
+        }
+
+        if ($request->has('phone')) {
+            $data['phone'] = $request->phone;
+        }
+
+        $data['active'] = false;
+        if ($request->has('active')) {
+            $data['active'] = filter_var($request->active, FILTER_VALIDATE_BOOLEAN);
+        }
+
+        if ($request->has('filename')) {
+            $data['filename'] = $request->filename;
+        }
+
+        if ($request->hasFile('image')) {
+            $data['filename'] = pathinfo(CommonActions::getValidFilenameStatic($request->image->getClientOriginalName()), PATHINFO_FILENAME) . '.' . $request->image->getClientOriginalExtension();
+        }
+
+        return $data;
     }
     public static function getLangArraysOnStore($data, $request, $languages, $modelId, $isUpdate)
     {
-        // TODO: Implement getLangArraysOnStore() method.
+        foreach ($languages as $language) {
+            $data[$language->code] = TeamTranslation::getLanguageArray($language, $request, $modelId, $isUpdate);
+        }
+
+        return $data;
     }
-    public function positionUp($id, CommonControllerAction $action)
+    public static function getFileRules(): string
     {
-        // TODO: Implement positionUp() method.
+        return FileDimensionHelper::getRules('Team', 1);
     }
-    public function positionDown($id, CommonControllerAction $action)
+    public static function getUserInfoMessage(): string
     {
-        // TODO: Implement positionDown() method.
+        return FileDimensionHelper::getUserInfoMessage('Team', 1);
+    }
+    public function getSystemImage(): string
+    {
+        return AdminHelper::getSystemImage(self::$TEAM_SYSTEM_IMAGE);
+    }
+    public function setKeys($array): array
+    {
+        $array[1]['sys_image_name'] = trans('team::admin.team.index');
+        $array[1]['sys_image']      = self::$TEAM_SYSTEM_IMAGE;
+        $array[1]['sys_image_path'] = AdminHelper::getSystemImage(self::$TEAM_SYSTEM_IMAGE);
+        $array[1]['ratio']          = self::$TEAM_RATIO;
+        $array[1]['mimes']          = self::$TEAM_MIMES;
+        $array[1]['max_file_size']  = self::$TEAM_MAX_FILE_SIZE;
+        $array[1]['file_rules']     = 'mimes:' . self::$TEAM_MIMES . '|size:' . self::$TEAM_MAX_FILE_SIZE . '|dimensions:ratio=' . self::$TEAM_RATIO;
+
+        return $array;
+    }
+    public function getFilepath($filename): string
+    {
+        return $this->getFilesPath() . $filename;
+    }
+    public function getFilesPath(): string
+    {
+        return self::FILES_PATH . '/' . $this->id . '/';
+    }
+    public function getAnnounce(): string
+    {
+        return Str::limit($this->announce, 255, ' ...');
+    }
+
+    public function headerGallery()
+    {
+        return $this->getHeaderGalleryRelation(get_class($this));
+    }
+    public function mainGallery()
+    {
+        return $this->getMainGalleryRelation(get_class($this));
+    }
+    public function additionalGalleryOne()
+    {
+        return $this->getAdditionalGalleryOneRelation(get_class($this));
+    }
+    public function additionalGalleryTwo()
+    {
+        return $this->getAdditionalGalleryTwoRelation(get_class($this));
+    }
+    public function additionalGalleryThree()
+    {
+        return $this->getAdditionalGalleryThreeRelation(get_class($this));
+    }
+    public function additionalGalleryFour()
+    {
+        return $this->getAdditionalGalleryFourRelation(get_class($this));
+    }
+    public function additionalGalleryFive()
+    {
+        return $this->getAdditionalGalleryFiveRelation(get_class($this));
+    }
+    public function additionalGallerySix()
+    {
+        return $this->getAdditionalGallerySixRelation(get_class($this));
     }
 }

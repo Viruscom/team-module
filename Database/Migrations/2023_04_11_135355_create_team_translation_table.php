@@ -17,9 +17,11 @@ class CreateTeamTranslationTable extends Migration
             $table->id();
             $table->unsignedBigInteger('team_id');
             $table->string('locale')->index();
-            $table->string('name');
-            $table->text('short_description')->nullable();
+            $table->string('title');
+            $table->text('announce')->nullable();
             $table->text('description')->nullable();
+            $table->string('url');
+            $table->boolean('visible')->default(true);
             $table->timestamps();
 
             $table->unique(['team_id', 'locale']);
