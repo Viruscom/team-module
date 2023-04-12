@@ -86,6 +86,18 @@ class Team extends Model implements TranslatableContract, CommonModelInterface, 
     {
         return FileDimensionHelper::getUserInfoMessage('Team', 1);
     }
+    public static function allocateModule($viewArray)
+    {
+        switch (class_basename($viewArray['currentModel']->parent)) {
+            case 'Team':
+                return view('team::front.show', ['viewArray' => $viewArray]);
+            case 'TeamDivision':
+                return view('team::front.list_team', ['viewArray' => $viewArray]);
+            default:
+                abort(404);
+        }
+    }
+
     public function getSystemImage(): string
     {
         return AdminHelper::getSystemImage(self::$TEAM_SYSTEM_IMAGE);

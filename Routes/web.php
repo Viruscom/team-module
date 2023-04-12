@@ -11,11 +11,18 @@
 |
 */
 
+use App\Http\Controllers\Front\FrontHomeController;
 use Illuminate\Support\Facades\Route;
+use Modules\Team\Http\Controllers\FrontTeamController;
 use Modules\Team\Http\Controllers\TeamController;
 
-Route::prefix('team')->group(function () {
-    Route::get('/', 'TeamController@index');
+Route::group(['prefix' => '/', 'middleware' => ['lockedSite', 'underMaintenance']], static function () {
+    Route::get('/', [FrontHomeController::class, 'index'])->name('front.index');
+
+    /* With language */
+    Route::group(['prefix' => '{languageSlug}', 'where' => ['languageSlug' => '[a-zA-Z]{2}']], static function () {
+        Route::get('/team/{division}', [FrontTeamController::class, 'index'])->name('front.team.division');
+    });
 });
 
 Route::group(['prefix' => 'admin', 'middleware' => ['auth']], static function () {
