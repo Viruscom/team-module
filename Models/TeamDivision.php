@@ -21,29 +21,29 @@ use Astrotomic\Translatable\Translatable;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Str;
 
-class Team extends Model implements TranslatableContract, CommonModelInterface, ImageModelInterface
+class TeamDivision extends Model implements TranslatableContract, CommonModelInterface
 {
     use Translatable, Scopes, StorageActions, CommonActions, HasGallery;
 
-    public const FILES_PATH = "images/team";
+    public const FILES_PATH = "images/team/division";
 
-    public static string $TEAM_SYSTEM_IMAGE  = "team_image.png";
-    public static string $TEAM_RATIO         = '1/1';
-    public static string $TEAM_MIMES         = 'jpg,jpeg,png,gif';
-    public static string $TEAM_MAX_FILE_SIZE = '3000';
+    public static string $TEAM_DIVISION_SYSTEM_IMAGE  = "team_division_image.png";
+    public static string $TEAM_DIVISION_RATIO         = '1/1';
+    public static string $TEAM_DIVISION_MIMES         = 'jpg,jpeg,png,gif';
+    public static string $TEAM_DIVISION_MAX_FILE_SIZE = '3000';
 
     public array $translatedAttributes = ['title', 'url', 'announce', 'description', 'visible'];
-    protected    $table                = "team";
+    protected    $table                = "team_division";
     protected    $fillable             = ['email', 'phone', 'filename', 'position', 'active'];
 
     public static function cacheUpdate(): void
     {
-        cache()->forget(CacheKeysHelper::$TEAM_ADMIN);
-        cache()->forget(CacheKeysHelper::$TEAM_FRONT);
-        cache()->remember(CacheKeysHelper::$TEAM_ADMIN, config('default.app.cache.ttl_seconds'), function () {
+        cache()->forget(CacheKeysHelper::$TEAM_DIVISION_ADMIN);
+        cache()->forget(CacheKeysHelper::$TEAM_DIVISION_FRONT);
+        cache()->remember(CacheKeysHelper::$TEAM_DIVISION_ADMIN, config('default.app.cache.ttl_seconds'), function () {
             return self::with('translations')->withTranslation()->orderBy('position')->get();
         });
-        cache()->rememberForever(CacheKeysHelper::$TEAM_FRONT, function () {
+        cache()->rememberForever(CacheKeysHelper::$TEAM_DIVISION_FRONT, function () {
             return self::active(true)->with('translations')->withTranslation()->orderBy('position')->get();
         });
     }
@@ -75,18 +75,18 @@ class Team extends Model implements TranslatableContract, CommonModelInterface, 
     public static function getLangArraysOnStore($data, $request, $languages, $modelId, $isUpdate)
     {
         foreach ($languages as $language) {
-            $data[$language->code] = TeamTranslation::getLanguageArray($language, $request, $modelId, $isUpdate);
+            $data[$language->code] = TeamDivisionTranslation::getLanguageArray($language, $request, $modelId, $isUpdate);
         }
 
         return $data;
     }
     public static function getFileRules(): string
     {
-        return FileDimensionHelper::getRules('Team', 1);
+        return FileDimensionHelper::getRules('Team', 2);
     }
     public static function getUserInfoMessage(): string
     {
-        return FileDimensionHelper::getUserInfoMessage('Team', 1);
+        return FileDimensionHelper::getUserInfoMessage('Team', 2);
     }
     public static function allocateModule($viewArray)
     {
@@ -103,27 +103,6 @@ class Team extends Model implements TranslatableContract, CommonModelInterface, 
     public function getSystemImage(): string
     {
         return AdminHelper::getSystemImage(self::$TEAM_SYSTEM_IMAGE);
-    }
-    public function setKeys($array): array
-    {
-        $array[1]['sys_image_name'] = trans('team::admin.team.index');
-        $array[1]['sys_image']      = self::$TEAM_SYSTEM_IMAGE;
-        $array[1]['sys_image_path'] = AdminHelper::getSystemImage(self::$TEAM_SYSTEM_IMAGE);
-        $array[1]['ratio']          = self::$TEAM_RATIO;
-        $array[1]['mimes']          = self::$TEAM_MIMES;
-        $array[1]['max_file_size']  = self::$TEAM_MAX_FILE_SIZE;
-        $array[1]['file_rules']     = 'mimes:' . self::$TEAM_MIMES . '|size:' . self::$TEAM_MAX_FILE_SIZE . '|dimensions:ratio=' . self::$TEAM_RATIO;
-
-        $array[2]['sys_image_name'] = trans('team::admin.team_division.index');
-        $array[2]['sys_image']      = TeamDivision::$TEAM_DIVISION_SYSTEM_IMAGE;
-        $array[2]['sys_image_path'] = AdminHelper::getSystemImage(TeamDivision::$TEAM_DIVISION_SYSTEM_IMAGE);
-        $array[2]['ratio']          = TeamDivision::$TEAM_DIVISION_RATIO;
-        $array[2]['mimes']          = TeamDivision::$TEAM_DIVISION_MIMES;
-        $array[2]['max_file_size']  = TeamDivision::$TEAM_DIVISION_MAX_FILE_SIZE;
-        $array[2]['file_rules']     = 'mimes:' . TeamDivision::$TEAM_DIVISION_MIMES . '|size:' . TeamDivision::$TEAM_DIVISION_MAX_FILE_SIZE . '|dimensions:ratio=' . TeamDivision::$TEAM_DIVISION_RATIO;
-
-
-        return $array;
     }
     public function getFilepath($filename): string
     {

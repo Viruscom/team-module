@@ -15,54 +15,56 @@ use Illuminate\Http\Request;
 use Illuminate\Routing\Controller;
 use Illuminate\Support\Facades\Cache;
 use Modules\Team\Models\Team;
+use Modules\Team\Models\TeamDivision;
+use Modules\Team\Models\TeamDivisionTranslation;
 use Modules\Team\Models\TeamTranslation;
 
-class TeamController extends Controller
+class TeamDivisionController extends Controller
 {
     public function index()
     {
-        if (is_null(Cache::get(CacheKeysHelper::$TEAM_ADMIN))) {
-            Team::cacheUpdate();
+        if (is_null(Cache::get(CacheKeysHelper::$TEAM_DIVISION_ADMIN))) {
+            TeamDivision::cacheUpdate();
         }
 
-        return view('team::admin.index', ['teamMembers' => Cache::get(CacheKeysHelper::$TEAM_ADMIN)]);
+        return view('team::admin.division.index', ['teamMembers' => Cache::get(CacheKeysHelper::$TEAM_DIVISION_ADMIN)]);
     }
     public function create()
     {
-        return view('team::admin.create', [
+        return view('team::admin.division.create', [
             'languages'     => LanguageHelper::getActiveLanguages(),
-            'fileRulesInfo' => Team::getUserInfoMessage()
+            'fileRulesInfo' => TeamDivision::getUserInfoMessage()
         ]);
     }
     public function store(Request $request, CommonControllerAction $action): RedirectResponse
     {
         if ($request->has('image')) {
-            $request->validate(['image' => FileDimensionHelper::getRules('Team', 1)], FileDimensionHelper::messages('Team', 1));
+            $request->validate(['image' => FileDimensionHelper::getRules('Team', 2)], FileDimensionHelper::messages('Team', 2));
         }
-        $team = $action->doSimpleCreate(Team::class, $request);
-        $action->updateUrlCache($team, TeamTranslation::class);
+        $team = $action->doSimpleCreate(TeamDivision::class, $request);
+        $action->updateUrlCache($team, TeamDivisionTranslation::class);
         $action->storeSeo($request, $team, 'Team');
-        Team::cacheUpdate();
+        TeamDivision::cacheUpdate();
 
         $team->storeAndAddNew($request);
 
-        return redirect()->route('admin.team.index')->with('success-message', trans('admin.common.successful_create'));
+        return redirect()->route('admin.team.division.index')->with('success-message', trans('admin.common.successful_create'));
     }
     public function edit($id)
     {
-        $teamMember = Team::whereId($id)->with('translations')->first();
+        $teamMember = TeamDivision::whereId($id)->with('translations')->first();
         MainHelper::goBackIfNull($teamMember);
 
-        return view('team::admin.edit', [
+        return view('team::admin.division.edit', [
             'teamMember'    => $teamMember,
             'languages'     => LanguageHelper::getActiveLanguages(),
-            'fileRulesInfo' => Team::getUserInfoMessage()
+            'fileRulesInfo' => TeamDivision::getUserInfoMessage()
         ]);
     }
     public function deleteMultiple(Request $request, CommonControllerAction $action): RedirectResponse
     {
         if (!is_null($request->ids[0])) {
-            $action->deleteMultiple($request, Team::class);
+            $action->deleteMultiple($request, TeamDivision::class);
 
             return redirect()->back()->with('success-message', 'admin.common.successful_delete');
         }
@@ -71,75 +73,75 @@ class TeamController extends Controller
     }
     public function activeMultiple($active, Request $request, CommonControllerAction $action): RedirectResponse
     {
-        $action->activeMultiple(Team::class, $request, $active);
-        Team::cacheUpdate();
+        $action->activeMultiple(TeamDivision::class, $request, $active);
+        TeamDivision::cacheUpdate();
 
         return redirect()->back()->with('success-message', 'admin.common.successful_edit');
     }
     public function update($id, Request $request, CommonControllerAction $action): RedirectResponse
     {
-        $teamMember = Team::whereId($id)->with('translations')->first();
+        $teamMember = TeamDivision::whereId($id)->with('translations')->first();
         MainHelper::goBackIfNull($teamMember);
 
-        $action->doSimpleUpdate(Team::class, TeamTranslation::class, $teamMember, $request);
-        $action->updateUrlCache($teamMember, TeamTranslation::class);
+        $action->doSimpleUpdate(TeamDivision::class, TeamDivisionTranslation::class, $teamMember, $request);
+        $action->updateUrlCache($teamMember, TeamDivisionTranslation::class);
         $action->updateSeo($request, $teamMember, 'Team');
 
         if ($request->has('image')) {
-            $request->validate(['image' => FileDimensionHelper::getRules('Team', 1)], FileDimensionHelper::messages('Team', 1));
+            $request->validate(['image' => FileDimensionHelper::getRules('Team', 2)], FileDimensionHelper::messages('Team', 2));
             $teamMember->saveFile($request->image);
         }
 
-        Team::cacheUpdate();
+        TeamDivision::cacheUpdate();
 
-        return redirect()->route('admin.team.index')->with('success-message', 'admin.common.successful_edit');
+        return redirect()->route('admin.team.division.index')->with('success-message', 'admin.common.successful_edit');
     }
     public function active($id, $active): RedirectResponse
     {
-        $teamMember = Team::find($id);
+        $teamMember = TeamDivision::find($id);
         MainHelper::goBackIfNull($teamMember);
 
         $teamMember->update(['active' => $active]);
-        Team::cacheUpdate();
+        TeamDivision::cacheUpdate();
 
         return redirect()->back()->with('success-message', 'admin.common.successful_edit');
     }
     public function delete($id, CommonControllerAction $action): RedirectResponse
     {
-        $teamMember = Team::where('id', $id)->first();
+        $teamMember = TeamDivision::where('id', $id)->first();
         MainHelper::goBackIfNull($teamMember);
 
         $action->deleteFromUrlCache($teamMember);
-        $action->delete(Team::class, $teamMember);
+        $action->delete(TeamDivision::class, $teamMember);
 
         return redirect()->back()->with('success-message', 'admin.common.successful_delete');
     }
     public function positionUp($id, CommonControllerAction $action): RedirectResponse
     {
-        $teamMember = Team::whereId($id)->with('translations')->first();
+        $teamMember = TeamDivision::whereId($id)->with('translations')->first();
         MainHelper::goBackIfNull($teamMember);
 
-        $action->positionUp(Team::class, $teamMember);
-        Team::cacheUpdate();
+        $action->positionUp(TeamDivision::class, $teamMember);
+        TeamDivision::cacheUpdate();
 
         return redirect()->back()->with('success-message', 'admin.common.successful_edit');
     }
     public function positionDown($id, CommonControllerAction $action): RedirectResponse
     {
-        $teamMember = Team::whereId($id)->with('translations')->first();
+        $teamMember = TeamDivision::whereId($id)->with('translations')->first();
         MainHelper::goBackIfNull($teamMember);
 
-        $action->positionDown(Team::class, $teamMember);
-        Team::cacheUpdate();
+        $action->positionDown(TeamDivision::class, $teamMember);
+        TeamDivision::cacheUpdate();
 
         return redirect()->back()->with('success-message', 'admin.common.successful_edit');
     }
     public function deleteImage($id, CommonControllerAction $action): RedirectResponse
     {
-        $teamMember = Team::find($id);
+        $teamMember = TeamDivision::find($id);
         MainHelper::goBackIfNull($teamMember);
 
-        if ($action->imageDelete($teamMember, Team::class)) {
+        if ($action->imageDelete($teamMember, TeamDivision::class)) {
             return redirect()->back()->with('success-message', 'admin.common.successful_delete');
         }
 

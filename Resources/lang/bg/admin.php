@@ -10,4 +10,7 @@ return [
         'email'  => 'E-mail',
         'no_records' => 'Няма добавени членове към екипа'
     ],
+    'team_division' => [
+        'index' => 'Отдели',
+    ],
 ];

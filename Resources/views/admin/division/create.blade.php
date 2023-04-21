@@ -16,7 +16,7 @@
 @section('content')
     @include('team::admin.breadcrumbs')
     @include('admin.notify')
-    <form class="my-form" action="{{ route('admin.team.store') }}" method="POST" data-form-type="store" enctype="multipart/form-data" autocomplete="off">
+    <form class="my-form" action="{{ route('admin.team.division.store') }}" method="POST" data-form-type="store" enctype="multipart/form-data" autocomplete="off">
         <span class="hidden curr-editor"></span>
         <div class="col-xs-12 p-0">
             <input type="hidden" name="_token" value="{{ csrf_token() }}">
