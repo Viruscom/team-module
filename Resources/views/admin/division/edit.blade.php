@@ -14,9 +14,9 @@
 @endsection
 
 @section('content')
-    @include('team::admin.breadcrumbs')
+    @include('team::admin.division.breadcrumbs')
     @include('admin.notify')
-    <form class="my-form" action="{{ route('admin.team.update', ['id' => $teamMember->id]) }}" method="POST" data-form-type="store" enctype="multipart/form-data" autocomplete="off">
+    <form class="my-form" action="{{ route('admin.team.division.update', ['id' => $teamMember->id]) }}" method="POST" data-form-type="store" enctype="multipart/form-data" autocomplete="off">
         <span class="hidden curr-editor"></span>
         <div class="col-xs-12 p-0">
             <input type="hidden" name="_token" value="{{ csrf_token() }}">
@@ -62,7 +62,7 @@
                 <div class="form form-horizontal">
                     <div class="form-body">
                         <hr>
-                        @include('admin.partials.on_edit.form_fields.upload_file', ['model' => $teamMember, 'deleteRoute' => route('admin.team.delete-image', ['id'=>$teamMember->id])])
+                        @include('admin.partials.on_edit.form_fields.upload_file', ['model' => $teamMember, 'deleteRoute' => route('admin.team.division.delete-image', ['id'=>$teamMember->id])])
                         @include('admin.partials.on_edit.active_checkbox', ['model' => $teamMember])
                     </div>
                     @include('admin.partials.on_edit.form_actions_bottom')

@@ -102,7 +102,7 @@ class TeamDivision extends Model implements TranslatableContract, CommonModelInt
 
     public function getSystemImage(): string
     {
-        return AdminHelper::getSystemImage(self::$TEAM_SYSTEM_IMAGE);
+        return AdminHelper::getSystemImage(self::$TEAM_DIVISION_SYSTEM_IMAGE);
     }
     public function getFilepath($filename): string
     {

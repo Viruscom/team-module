@@ -14,7 +14,7 @@
 @endsection
 
 @section('content')
-    @include('team::admin.breadcrumbs')
+    @include('team::admin.division.breadcrumbs')
     @include('admin.notify')
     <form class="my-form" action="{{ route('admin.team.division.store') }}" method="POST" data-form-type="store" enctype="multipart/form-data" autocomplete="off">
         <span class="hidden curr-editor"></span>

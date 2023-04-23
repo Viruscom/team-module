@@ -1,7 +1,7 @@
 @extends('layouts.admin.app')
 
 @section('content')
-    @include('team::admin.breadcrumbs')
+    @include('team::admin.division.breadcrumbs')
     @include('admin.notify')
     @include('admin.partials.index.top_search_with_mass_buttons', ['mainRoute' => 'team.division'])
 
@@ -52,33 +52,12 @@
                                     <table class="table-details">
                                         <tbody>
                                         <tr>
-                                            <td width="28%">SEO:
-                                                @if ($teamMember->seo_description != "")
-                                                    <span class="text-purple"><i class="fa fa-check"></i></span>
-                                                @else
-                                                    <span class="font-grey"><i class="fa fa-times"></i></span>
-                                                @endif
-                                            </td>
-                                            <td width="19%">снимки в хедър/галерия:
-                                                <span class="text-purple">{{$teamMember->in_header}}/{{$teamMember->in_gallery}}</span>
-                                            </td>
-                                            <td>
-                                            </td>
                                         </tr>
                                         </tbody>
                                     </table>
                                     <table class="table-details-buttons">
                                         <tbody>
                                         <tr>
-                                            <td>
-                                                <span class="margin-right-10">SEO</span>
-                                                <a class="btn btn-sm green" href="{{ url('/admin/seo/page/'.$teamMember->id.'/edit') }}" role="button"><i class="fas fa-pencil-alt"></i></a>
-                                            </td>
-                                            <td>
-                                                <span class="margin-right-10">Галерия</span>
-                                                {{--                                                <a class="btn btn-sm green" href="{{ url('/admin/galleries/'.$galleryContentPageTypeId.'/'.$teamMember->id.'/create') }}" role="button"><i class="fa fa-plus"></i></a>--}}
-                                                {{--                                                <a class="btn btn-sm purple-a" href="{{ url('/admin/galleries/loadGalleries/'.$galleryContentPageTypeId.'/'.$teamMember->id.'/') }}" role="button"><i class="fa fa-bars"></i></a>--}}
-                                            </td>
                                         </tr>
                                         </tbody>
                                     </table>
@@ -90,11 +69,11 @@
                                 <?php $i++; ?>
                         @endforeach
                         <tr style="display: none;">
-                            <td colspan="5" class="no-table-rows">{{ trans('team::admin.team.no_records') }}</td>
+                            <td colspan="5" class="no-table-rows">{{ trans('team::admin.team_division.no_records') }}</td>
                         </tr>
                     @else
                         <tr>
-                            <td colspan="5" class="no-table-rows">{{ trans('team::admin.team.no_records') }}</td>
+                            <td colspan="5" class="no-table-rows">{{ trans('team::admin.team_division.no_records') }}</td>
                         </tr>
                     @endif
                     </tbody>
