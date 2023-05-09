@@ -14,6 +14,8 @@ use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Routing\Controller;
 use Illuminate\Support\Facades\Cache;
+use Modules\Team\Http\Requests\TeamStoreRequest;
+use Modules\Team\Http\Requests\TeamUpdateRequest;
 use Modules\Team\Models\Team;
 use Modules\Team\Models\TeamTranslation;
 
@@ -34,7 +36,7 @@ class TeamController extends Controller
             'fileRulesInfo' => Team::getUserInfoMessage()
         ]);
     }
-    public function store(Request $request, CommonControllerAction $action): RedirectResponse
+    public function store(TeamStoreRequest $request, CommonControllerAction $action): RedirectResponse
     {
         if ($request->has('image')) {
             $request->validate(['image' => FileDimensionHelper::getRules('Team', 1)], FileDimensionHelper::messages('Team', 1));
@@ -76,7 +78,7 @@ class TeamController extends Controller
 
         return redirect()->back()->with('success-message', 'admin.common.successful_edit');
     }
-    public function update($id, Request $request, CommonControllerAction $action): RedirectResponse
+    public function update($id, TeamUpdateRequest $request, CommonControllerAction $action): RedirectResponse
     {
         $teamMember = Team::whereId($id)->with('translations')->first();
         MainHelper::goBackIfNull($teamMember);
