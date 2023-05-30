@@ -38,7 +38,7 @@
                     @foreach($languages as $language)
                         <div id="{{$language->code}}" class="tab-pane fade in @if($language->code === config('default.app.language.code')) active @endif">
                             @include('admin.partials.on_create.form_fields.input_text', ['fieldName' => 'title_' . $language->code, 'label' => trans('team::admin.team.title'), 'required' => true])
-                            @include('admin.partials.on_create.form_fields.textarea', ['fieldName' => 'announce_' . $language->code, 'rows' => 9, 'label' => trans('admin.announce'), 'required' => false])
+                            @include('admin.partials.on_create.form_fields.textarea_without_ckeditor', ['fieldName' => 'announce_' . $language->code, 'rows' => 4, 'label' => trans('admin.announce'), 'required' => false])
                             @include('admin.partials.on_create.form_fields.textarea', ['fieldName' => 'description_' . $language->code, 'rows' => 9, 'label' => trans('admin.description'), 'required' => false])
                             @include('admin.partials.on_create.show_in_language_visibility_checkbox', ['fieldName' => 'visible_' . $language->code])
                         </div>
