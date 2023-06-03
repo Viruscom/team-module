@@ -41,10 +41,10 @@ class Team extends Model implements TranslatableContract, CommonModelInterface, 
         cache()->forget(CacheKeysHelper::$TEAM_ADMIN);
         cache()->forget(CacheKeysHelper::$TEAM_FRONT);
         cache()->remember(CacheKeysHelper::$TEAM_ADMIN, config('default.app.cache.ttl_seconds'), function () {
-            return self::with('translations')->withTranslation()->orderBy('position')->get();
+            return self::with('translations')->orderBy('position')->get();
         });
         cache()->rememberForever(CacheKeysHelper::$TEAM_FRONT, function () {
-            return self::active(true)->with('translations')->withTranslation()->orderBy('position')->get();
+            return self::active(true)->with('translations')->orderBy('position')->get();
         });
     }
     public static function getRequestData($request)
