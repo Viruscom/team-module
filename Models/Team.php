@@ -47,6 +47,7 @@ class Team extends Model implements TranslatableContract, CommonModelInterface, 
             return self::active(true)->with('translations')->orderBy('position')->get();
         });
     }
+
     public static function getRequestData($request)
     {
         if ($request->has('email')) {
