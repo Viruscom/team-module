@@ -20,8 +20,11 @@ class TeamTranslation extends Model implements CommonModelTranslationInterfaces
         $data = [
             'locale' => $language->code,
             'title'  => $request['title_' . $language->code],
-            'url'    => UrlHelper::generate($request['title_' . $language->code], TeamTranslation::class, $modelId, $isUpdate)
         ];
+
+        if (!$isUpdate) {
+            $data['url'] = UrlHelper::generate($request['title_' . $language->code], self::class, $modelId, $isUpdate);
+        }
 
         if ($request->has('announce_' . $language->code)) {
             $data['announce'] = $request['announce_' . $language->code];
