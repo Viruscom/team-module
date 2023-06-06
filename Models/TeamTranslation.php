@@ -19,7 +19,7 @@ class TeamTranslation extends Model implements CommonModelTranslationInterfaces
     {
         $data = [
             'locale' => $language->code,
-            'title'  => UrlHelper::makeUniqueTitle($request['title_' . $language->code], $language->code, TeamTranslation::class, $modelId, $isUpdate),
+            'title'  => $request['title_' . $language->code],
             'url'    => UrlHelper::generate($request['title_' . $language->code], TeamTranslation::class, $modelId, $isUpdate)
         ];
 

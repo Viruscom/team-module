@@ -19,7 +19,7 @@ class TeamDivisionTranslation extends Model implements CommonModelTranslationInt
     {
         $data = [
             'locale' => $language->code,
-            'title'  => UrlHelper::makeUniqueTitle($request['title_' . $language->code], $language->code, TeamDivisionTranslation::class, $modelId, $isUpdate),
+            'title'  => $request['title_' . $language->code],
             'url'    => UrlHelper::generate($request['title_' . $language->code], TeamDivisionTranslation::class, $modelId, $isUpdate)
         ];
 
