@@ -2,15 +2,11 @@
 
 namespace Modules\Team\Models;
 
-use App\Actions\CommonControllerAction;
 use App\Helpers\AdminHelper;
 use App\Helpers\CacheKeysHelper;
 use App\Helpers\FileDimensionHelper;
 use App\Helpers\SeoHelper;
 use App\Interfaces\Models\CommonModelInterface;
-use App\Interfaces\Models\ImageModelInterface;
-use App\Interfaces\PositionInterface;
-use App\Models\CategoryPage\CategoryPageTranslation;
 use App\Models\Seo;
 use App\Traits\CommonActions;
 use App\Traits\HasGallery;
@@ -40,7 +36,7 @@ class TeamDivision extends Model implements TranslatableContract, CommonModelInt
     {
         cache()->forget(CacheKeysHelper::$TEAM_DIVISION_ADMIN);
         cache()->forget(CacheKeysHelper::$TEAM_DIVISION_FRONT);
-        cache()->remember(CacheKeysHelper::$TEAM_DIVISION_ADMIN, config('default.app.cache.ttl_seconds'), function () {
+        cache()->rememberForever(CacheKeysHelper::$TEAM_DIVISION_ADMIN, function () {
             return self::with('translations')->withTranslation()->orderBy('position')->get();
         });
         cache()->rememberForever(CacheKeysHelper::$TEAM_DIVISION_FRONT, function () {

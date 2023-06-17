@@ -2,15 +2,12 @@
 
 namespace Modules\Team\Models;
 
-use App\Actions\CommonControllerAction;
 use App\Helpers\AdminHelper;
 use App\Helpers\CacheKeysHelper;
 use App\Helpers\FileDimensionHelper;
 use App\Helpers\SeoHelper;
 use App\Interfaces\Models\CommonModelInterface;
 use App\Interfaces\Models\ImageModelInterface;
-use App\Interfaces\PositionInterface;
-use App\Models\CategoryPage\CategoryPageTranslation;
 use App\Models\Seo;
 use App\Traits\CommonActions;
 use App\Traits\HasGallery;
@@ -40,7 +37,7 @@ class Team extends Model implements TranslatableContract, CommonModelInterface, 
     {
         cache()->forget(CacheKeysHelper::$TEAM_ADMIN);
         cache()->forget(CacheKeysHelper::$TEAM_FRONT);
-        cache()->remember(CacheKeysHelper::$TEAM_ADMIN, config('default.app.cache.ttl_seconds'), function () {
+        cache()->rememberForever(CacheKeysHelper::$TEAM_ADMIN, function () {
             return self::with('translations')->orderBy('position')->get();
         });
         cache()->rememberForever(CacheKeysHelper::$TEAM_FRONT, function () {
@@ -100,11 +97,6 @@ class Team extends Model implements TranslatableContract, CommonModelInterface, 
                 abort(404);
         }
     }
-
-    public function getSystemImage(): string
-    {
-        return AdminHelper::getSystemImage(self::$TEAM_SYSTEM_IMAGE);
-    }
     public function setKeys($array): array
     {
         $array[1]['sys_image_name'] = trans('team::admin.team.index');
@@ -123,8 +115,11 @@ class Team extends Model implements TranslatableContract, CommonModelInterface, 
         $array[2]['max_file_size']  = TeamDivision::$TEAM_DIVISION_MAX_FILE_SIZE;
         $array[2]['file_rules']     = 'mimes:' . TeamDivision::$TEAM_DIVISION_MIMES . '|size:' . TeamDivision::$TEAM_DIVISION_MAX_FILE_SIZE . '|dimensions:ratio=' . TeamDivision::$TEAM_DIVISION_RATIO;
 
-
         return $array;
+    }
+    public function getSystemImage(): string
+    {
+        return AdminHelper::getSystemImage(self::$TEAM_SYSTEM_IMAGE);
     }
     public function getFilepath($filename): string
     {
