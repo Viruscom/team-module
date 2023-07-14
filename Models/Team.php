@@ -24,7 +24,7 @@ class Team extends Model implements TranslatableContract, CommonModelInterface, 
 
     public const FILES_PATH = "images/team";
 
-    public static string $TEAM_SYSTEM_IMAGE  = "team_image.png";
+    public static string $TEAM_SYSTEM_IMAGE  = "team_1_image.png";
     public static string $TEAM_RATIO         = '1/1';
     public static string $TEAM_MIMES         = 'jpg,jpeg,png,gif';
     public static string $TEAM_MAX_FILE_SIZE = '3000';

@@ -23,7 +23,7 @@ class TeamDivision extends Model implements TranslatableContract, CommonModelInt
 
     public const FILES_PATH = "images/team/division";
 
-    public static string $TEAM_DIVISION_SYSTEM_IMAGE  = "team_division_image.png";
+    public static string $TEAM_DIVISION_SYSTEM_IMAGE  = "team_2_image.png";
     public static string $TEAM_DIVISION_RATIO         = '1/1';
     public static string $TEAM_DIVISION_MIMES         = 'jpg,jpeg,png,gif';
     public static string $TEAM_DIVISION_MAX_FILE_SIZE = '3000';
