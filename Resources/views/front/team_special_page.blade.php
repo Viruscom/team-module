@@ -46,7 +46,7 @@
 
                     <div class="box-content">
                         <h3>
-                            <a href="{{ $divisionMember->getUrl($languageSlug) }}">{{ $divisionMember->name }}</a>
+                            <a href="{{ $divisionMember->getUrl($languageSlug) }}">{{ $divisionMember->title }}</a>
                         </h3>
 
                         <h4>{{ $divisionMember->job_position }}</h4>
