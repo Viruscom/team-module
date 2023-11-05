@@ -16,6 +16,7 @@
     use Astrotomic\Translatable\Contracts\Translatable as TranslatableContract;
     use Astrotomic\Translatable\Translatable;
     use Illuminate\Database\Eloquent\Model;
+    use Illuminate\Database\Eloquent\Relations\BelongsTo;
     use Illuminate\Support\Str;
 
     class Team extends Model implements TranslatableContract, CommonModelInterface, ImageModelInterface
@@ -101,6 +102,14 @@
                     abort(404);
             }
         }
+        
+        public static function getTeamSpecialPage($viewArray)
+        {
+            return view('team::front.team_special_page', [
+                'viewArray' => $viewArray,
+                'divisions' => TeamDivision::where('active', true)->orderBy('position', 'asc')->with('members')->get()
+            ]);
+        }
         public function setKeys($array): array
         {
             $array[1]['sys_image_name'] = trans('team::admin.team.index');
@@ -182,5 +191,14 @@
                 return null;
             }
             SeoHelper::setSeoFields($this, $seo->translate($languageSlug));
+        }
+
+        public function division(): BelongsTo
+        {
+            return $this->belongsTo(TeamDivision::class, 'division_id', 'id');
+        }
+        public function getUrl($languageSlug)
+        {
+            return url($languageSlug . '/' . $this->url);
         }
     }

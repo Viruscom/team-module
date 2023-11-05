@@ -1,21 +1,21 @@
 <?php
 
-namespace Modules\Team\Database\Seeders;
+    namespace Modules\Team\Database\Seeders;
 
-use Illuminate\Database\Seeder;
-use Illuminate\Database\Eloquent\Model;
+    use Illuminate\Database\Eloquent\Model;
+    use Illuminate\Database\Seeder;
 
-class TeamDatabaseSeeder extends Seeder
-{
-    /**
-     * Run the database seeds.
-     *
-     * @return void
-     */
-    public function run()
+    class TeamDatabaseSeeder extends Seeder
     {
-        Model::unguard();
+        /**
+         * Run the database seeds.
+         *
+         * @return void
+         */
+        public function run()
+        {
+            Model::unguard();
 
-        // $this->call("OthersTableSeeder");
+            $this->call(TeamSpecialPageTableSeeder::class);
+        }
     }
-}
