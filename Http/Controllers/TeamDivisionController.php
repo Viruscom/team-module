@@ -92,12 +92,12 @@
             $teamMember = TeamDivision::whereId($id)->with('translations')->first();
             MainHelper::goBackIfNull($teamMember);
 
+            $action->validateImage($request, 'Team', 2);
             $action->doSimpleUpdate(TeamDivision::class, TeamDivisionTranslation::class, $teamMember, $request);
             $action->updateUrlCache($teamMember, TeamDivisionTranslation::class);
             $action->updateSeo($request, $teamMember, 'Team');
 
             if ($request->has('image')) {
-                $request->validate(['image' => FileDimensionHelper::getRules('Team', 2)], FileDimensionHelper::messages('Team', 2));
                 $teamMember->saveFile($request->image);
             }
 

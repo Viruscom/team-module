@@ -14,6 +14,7 @@
     use Modules\Team\Http\Requests\TeamStoreRequest;
     use Modules\Team\Http\Requests\TeamUpdateRequest;
     use Modules\Team\Models\Team;
+    use Modules\Team\Models\TeamDivision;
     use Modules\Team\Models\TeamTranslation;
 
     class TeamController extends Controller
@@ -29,6 +30,7 @@
         public function create()
         {
             return view('team::admin.create', [
+                'divisions'     => TeamDivision::all(),
                 'languages'     => LanguageHelper::getActiveLanguages(),
                 'fileRulesInfo' => Team::getUserInfoMessage()
             ]);
@@ -92,12 +94,12 @@
             $teamMember = Team::whereId($id)->with('translations')->first();
             MainHelper::goBackIfNull($teamMember);
 
+            $action->validateImage($request, 'Team', 1);
             $action->doSimpleUpdate(Team::class, TeamTranslation::class, $teamMember, $request);
             $action->updateUrlCache($teamMember, TeamTranslation::class);
             $action->updateSeo($request, $teamMember, 'Team');
 
             if ($request->has('image')) {
-                $request->validate(['image' => FileDimensionHelper::getRules('Team', 1)], FileDimensionHelper::messages('Team', 1));
                 $teamMember->saveFile($request->image);
             }
 

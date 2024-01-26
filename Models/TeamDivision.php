@@ -162,6 +162,6 @@
 
         public function members(): HasMany
         {
-            return $this->hasMany(Team::class, 'division_id', 'id');
+            return $this->hasMany(Team::class, 'division_id', 'id')->where('active', true)->orderBy('position');
         }
     }
