@@ -34,7 +34,7 @@
                                 <td>{{ $teamMember->title }}</td>
                                 <td>{{ $teamMember->email }}</td>
                                 <td class="pull-right">
-                                @include('admin.partials.index.action_buttons', ['mainRoute' => Request::segment(2), 'models' => $teamMembers, 'model' => $teamMember, 'showInPublicModal' => false])
+                                    @include('admin.partials.index.action_buttons', ['mainRoute' => Request::segment(2), 'models' => $teamMembers, 'model' => $teamMember, 'showInPublicModal' => false])
                                 </td>
                             </tr>
                             <tr class="t-row-details row-{{$teamMember->id}}-details hidden">
@@ -59,11 +59,10 @@
                                                     <span class="font-grey"><i class="fa fa-times"></i></span>
                                                 @endif
                                             </td>
-                                            <td width="19%">снимки в хедър/галерия:
+                                            <td width="19%">{{ __('admin.images_in_header') }}:
                                                 <span class="text-purple">{{$teamMember->in_header}}/{{$teamMember->in_gallery}}</span>
                                             </td>
-                                            <td>
-                                            </td>
+                                            <td></td>
                                         </tr>
                                         </tbody>
                                     </table>
@@ -75,7 +74,7 @@
                                                 <a class="btn btn-sm green" href="{{ url('/admin/seo/page/'.$teamMember->id.'/edit') }}" role="button"><i class="fas fa-pencil-alt"></i></a>
                                             </td>
                                             <td>
-                                                <span class="margin-right-10">Галерия</span>
+                                                <span class="margin-right-10">{{ __('admin.albums.gallery') }}</span>
                                                 {{--                                                <a class="btn btn-sm green" href="{{ url('/admin/galleries/'.$galleryContentPageTypeId.'/'.$teamMember->id.'/create') }}" role="button"><i class="fa fa-plus"></i></a>--}}
                                                 {{--                                                <a class="btn btn-sm purple-a" href="{{ url('/admin/galleries/loadGalleries/'.$galleryContentPageTypeId.'/'.$teamMember->id.'/') }}" role="button"><i class="fa fa-bars"></i></a>--}}
                                             </td>

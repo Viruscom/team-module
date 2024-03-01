@@ -55,7 +55,7 @@
                 <hr>
                 <div class="row">
                     <div class="col-md-6 col-xs-12">
-                        @include('admin.partials.on_edit.form_fields.select', ['fieldName' => 'division_id', 'label' => 'Отдел', 'models' => $divisions, 'modelId' => $teamMember->division_id, 'required' => false, 'labelClass' => 'select-label-fix', 'class' => 'select-fix m-b-10', 'withPleaseSelect' => true])
+                        @include('admin.partials.on_edit.form_fields.select', ['fieldName' => 'division_id', 'label' => trans('team::admin.team_division.division'), 'models' => $divisions, 'modelId' => $teamMember->division_id, 'required' => false, 'labelClass' => 'select-label-fix', 'class' => 'select-fix m-b-10', 'withPleaseSelect' => true])
 
                         @include('admin.partials.on_edit.form_fields.input_text', ['fieldName' => 'phone', 'label' => trans('team::admin.team.phone'), 'required' => false, 'model' => $teamMember])
                     </div>
