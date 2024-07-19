@@ -15,7 +15,6 @@
     @endphp
 
     @include('front.partials.inner_header_small')
-    @include('front.partials.head-logos', ['logos' => $indexPageLogos])
     @include('front.partials.breadcrumbs')
 
     <section class="section-team-member">

@@ -26,7 +26,7 @@
 
         public static string $TEAM_DIVISION_SYSTEM_IMAGE  = "team_2_image.png";
         public static string $TEAM_DIVISION_RATIO         = '1/1';
-        public static string $TEAM_DIVISION_MIMES         = 'jpg,jpeg,png,gif';
+        public static string $TEAM_DIVISION_MIMES         = 'jpg,jpeg,png,gif,webp';
         public static string $TEAM_DIVISION_MAX_FILE_SIZE = '3000';
 
         public array $translatedAttributes = ['title', 'url', 'announce', 'description', 'visible'];
@@ -44,6 +44,7 @@
                 return self::active(true)->with('translations')->withTranslation()->orderBy('position')->get();
             });
         }
+
         public static function getRequestData($request)
         {
             if ($request->has('email')) {
@@ -69,6 +70,7 @@
 
             return $data;
         }
+
         public static function getLangArraysOnStore($data, $request, $languages, $modelId, $isUpdate)
         {
             foreach ($languages as $language) {
@@ -77,14 +79,17 @@
 
             return $data;
         }
+
         public static function getFileRules(): string
         {
             return FileDimensionHelper::getRules('Team', 2);
         }
+
         public static function getUserInfoMessage(): string
         {
             return FileDimensionHelper::getUserInfoMessage('Team', 2);
         }
+
         public static function allocateModule($viewArray)
         {
             switch (class_basename($viewArray['currentModel']->parent)) {
@@ -101,14 +106,17 @@
         {
             return AdminHelper::getSystemImage(self::$TEAM_DIVISION_SYSTEM_IMAGE);
         }
+
         public function getFilepath($filename): string
         {
             return $this->getFilesPath() . $filename;
         }
+
         public function getFilesPath(): string
         {
             return self::FILES_PATH . '/' . $this->id . '/';
         }
+
         public function getAnnounce(): string
         {
             return Str::limit($this->announce, 255, ' ...');
@@ -118,34 +126,42 @@
         {
             return $this->getHeaderGalleryRelation(get_class($this));
         }
+
         public function mainGallery()
         {
             return $this->getMainGalleryRelation(get_class($this));
         }
+
         public function additionalGalleryOne()
         {
             return $this->getAdditionalGalleryOneRelation(get_class($this));
         }
+
         public function additionalGalleryTwo()
         {
             return $this->getAdditionalGalleryTwoRelation(get_class($this));
         }
+
         public function additionalGalleryThree()
         {
             return $this->getAdditionalGalleryThreeRelation(get_class($this));
         }
+
         public function additionalGalleryFour()
         {
             return $this->getAdditionalGalleryFourRelation(get_class($this));
         }
+
         public function additionalGalleryFive()
         {
             return $this->getAdditionalGalleryFiveRelation(get_class($this));
         }
+
         public function additionalGallerySix()
         {
             return $this->getAdditionalGallerySixRelation(get_class($this));
         }
+
         public function seoFields()
         {
             return $this->hasOne(Seo::class, 'model_id')->where('model', get_class($this));

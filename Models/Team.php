@@ -27,7 +27,7 @@
 
         public static string $TEAM_SYSTEM_IMAGE  = "team_1_image.png";
         public static string $TEAM_RATIO         = '1/1';
-        public static string $TEAM_MIMES         = 'jpg,jpeg,png,gif';
+        public static string $TEAM_MIMES         = 'jpg,jpeg,png,gif,webp';
         public static string $TEAM_MAX_FILE_SIZE = '3000';
 
         public array $translatedAttributes = ['title', 'url', 'announce', 'description', 'visible'];
@@ -75,6 +75,7 @@
 
             return $data;
         }
+
         public static function getLangArraysOnStore($data, $request, $languages, $modelId, $isUpdate)
         {
             foreach ($languages as $language) {
@@ -83,14 +84,17 @@
 
             return $data;
         }
+
         public static function getFileRules(): string
         {
             return FileDimensionHelper::getRules('Team', 1);
         }
+
         public static function getUserInfoMessage(): string
         {
             return FileDimensionHelper::getUserInfoMessage('Team', 1);
         }
+
         public static function allocateModule($viewArray)
         {
             switch (class_basename($viewArray['currentModel']->parent)) {
@@ -102,7 +106,7 @@
                     abort(404);
             }
         }
-        
+
         public static function getTeamSpecialPage($viewArray)
         {
             return view('team::front.team_special_page', [
@@ -110,6 +114,7 @@
                 'divisions' => TeamDivision::where('active', true)->orderBy('position', 'asc')->with('members')->get()
             ]);
         }
+
         public function setKeys($array): array
         {
             $array[1]['sys_image_name'] = trans('team::admin.team.index');
@@ -130,18 +135,22 @@
 
             return $array;
         }
+
         public function getSystemImage(): string
         {
             return AdminHelper::getSystemImage(self::$TEAM_SYSTEM_IMAGE);
         }
+
         public function getFilepath($filename): string
         {
             return $this->getFilesPath() . $filename;
         }
+
         public function getFilesPath(): string
         {
             return self::FILES_PATH . '/' . $this->id . '/';
         }
+
         public function getAnnounce(): string
         {
             return Str::limit($this->announce, 255, ' ...');
@@ -151,34 +160,42 @@
         {
             return $this->getHeaderGalleryRelation(get_class($this));
         }
+
         public function mainGallery()
         {
             return $this->getMainGalleryRelation(get_class($this));
         }
+
         public function additionalGalleryOne()
         {
             return $this->getAdditionalGalleryOneRelation(get_class($this));
         }
+
         public function additionalGalleryTwo()
         {
             return $this->getAdditionalGalleryTwoRelation(get_class($this));
         }
+
         public function additionalGalleryThree()
         {
             return $this->getAdditionalGalleryThreeRelation(get_class($this));
         }
+
         public function additionalGalleryFour()
         {
             return $this->getAdditionalGalleryFourRelation(get_class($this));
         }
+
         public function additionalGalleryFive()
         {
             return $this->getAdditionalGalleryFiveRelation(get_class($this));
         }
+
         public function additionalGallerySix()
         {
             return $this->getAdditionalGallerySixRelation(get_class($this));
         }
+
         public function seoFields()
         {
             return $this->hasOne(Seo::class, 'model_id')->where('model', get_class($this));
@@ -197,6 +214,7 @@
         {
             return $this->belongsTo(TeamDivision::class, 'division_id', 'id');
         }
+
         public function getUrl($languageSlug)
         {
             return url($languageSlug . '/' . $this->url);
