@@ -24,10 +24,7 @@
 
         public const FILES_PATH = "images/team/division";
 
-        public static string $TEAM_DIVISION_SYSTEM_IMAGE  = "team_2_image.png";
-        public static string $TEAM_DIVISION_RATIO         = '1/1';
-        public static string $TEAM_DIVISION_MIMES         = 'jpg,jpeg,png,gif,webp';
-        public static string $TEAM_DIVISION_MAX_FILE_SIZE = '3000';
+        public static string $TEAM_DIVISION_SYSTEM_IMAGE = "team_2_image.png";
 
         public array $translatedAttributes = ['title', 'url', 'announce', 'description', 'visible'];
         protected    $table                = "team_division";
