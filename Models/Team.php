@@ -120,18 +120,20 @@
             $array[1]['sys_image_name'] = trans('team::admin.team.index');
             $array[1]['sys_image']      = self::$TEAM_SYSTEM_IMAGE;
             $array[1]['sys_image_path'] = AdminHelper::getSystemImage(self::$TEAM_SYSTEM_IMAGE);
-            $array[1]['ratio']          = self::$TEAM_RATIO;
-            $array[1]['mimes']          = self::$TEAM_MIMES;
-            $array[1]['max_file_size']  = self::$TEAM_MAX_FILE_SIZE;
-            $array[1]['file_rules']     = 'mimes:' . self::$TEAM_MIMES . '|size:' . self::$TEAM_MAX_FILE_SIZE . '|dimensions:ratio=' . self::$TEAM_RATIO;
+            $array[1]['field_name']     = 'team';
+            $array[1]['ratio']          = self::getModelRatio('team');
+            $array[1]['mimes']          = self::getModelMime('team');
+            $array[1]['max_file_size']  = self::getModelMaxFileSize('team');
+            $array[1]['file_rules']     = 'mimes:' . self::getModelMime('team') . '|size:' . self::getModelMaxFileSize('team') . '|dimensions:ratio=' . self::getModelRatio('team');
 
             $array[2]['sys_image_name'] = trans('team::admin.team_division.index');
             $array[2]['sys_image']      = TeamDivision::$TEAM_DIVISION_SYSTEM_IMAGE;
             $array[2]['sys_image_path'] = AdminHelper::getSystemImage(TeamDivision::$TEAM_DIVISION_SYSTEM_IMAGE);
-            $array[2]['ratio']          = TeamDivision::$TEAM_DIVISION_RATIO;
-            $array[2]['mimes']          = TeamDivision::$TEAM_DIVISION_MIMES;
-            $array[2]['max_file_size']  = TeamDivision::$TEAM_DIVISION_MAX_FILE_SIZE;
-            $array[2]['file_rules']     = 'mimes:' . TeamDivision::$TEAM_DIVISION_MIMES . '|size:' . TeamDivision::$TEAM_DIVISION_MAX_FILE_SIZE . '|dimensions:ratio=' . TeamDivision::$TEAM_DIVISION_RATIO;
+            $array[2]['field_name']     = 'team_division';
+            $array[2]['ratio']          = self::getModelRatio('team_division');
+            $array[2]['mimes']          = self::getModelMime('team_division');
+            $array[2]['max_file_size']  = self::getModelMaxFileSize('team_division');
+            $array[2]['file_rules']     = 'mimes:' . self::getModelMime('team_division') . '|size:' . self::getModelMaxFileSize('team_division') . '|dimensions:ratio=' . self::getModelRatio('team_division');
 
             return $array;
         }
