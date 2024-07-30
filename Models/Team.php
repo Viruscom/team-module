@@ -11,6 +11,7 @@
     use App\Models\Seo;
     use App\Traits\CommonActions;
     use App\Traits\HasGallery;
+    use App\Traits\HasModelRatios;
     use App\Traits\Scopes;
     use App\Traits\StorageActions;
     use Astrotomic\Translatable\Contracts\Translatable as TranslatableContract;
@@ -21,7 +22,7 @@
 
     class Team extends Model implements TranslatableContract, CommonModelInterface, ImageModelInterface
     {
-        use Translatable, Scopes, StorageActions, CommonActions, HasGallery;
+        use Translatable, Scopes, StorageActions, CommonActions, HasGallery, HasModelRatios;
 
         public const FILES_PATH = "images/team";
 
