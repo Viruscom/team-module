@@ -177,4 +177,9 @@
         {
             return $this->hasMany(Team::class, 'division_id', 'id')->where('active', true)->orderBy('position');
         }
+
+        public function setKeys($array): array
+        {
+            //Go to Team model
+        }
     }
