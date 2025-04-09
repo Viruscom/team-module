@@ -156,6 +156,11 @@ class Team extends Model implements TranslatableContract, CommonModelInterface, 
         return Str::limit($this->announce, 255, ' ...');
     }
 
+    public function getEncryptedPath($moduleName): string
+    {
+        return encrypt($moduleName . '-' . get_class($this) . '-' . $this->id);
+    }
+
     public function headerGallery()
     {
         return $this->getHeaderGalleryRelation(get_class($this));
