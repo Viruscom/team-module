@@ -231,7 +231,7 @@ class Team extends Model implements TranslatableContract, CommonModelInterface, 
             ->where('division_id', $this->division_id)
             ->where('active', true)
             ->with('translations')
-            ->orderBy('id', 'desc')
+            ->orderBy('position', 'asc')
             ->first();
         if (!is_null($previous)) {
             $previous = $previous->getUrl($languageSlug);
@@ -241,7 +241,7 @@ class Team extends Model implements TranslatableContract, CommonModelInterface, 
             ->where('division_id', $this->division_id)
             ->where('active', true)
             ->with('translations')
-            ->orderBy('id', 'asc')
+            ->orderBy('position', 'asc')
             ->first();
         if (!is_null($next)) {
             $next = $next->getUrl($languageSlug);
